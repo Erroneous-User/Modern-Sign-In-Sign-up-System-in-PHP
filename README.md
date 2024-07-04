@@ -26,7 +26,7 @@
 
 2. **Set Up the Database**:
     - Create a new MySQL database.
-    - Import the `database.sql` file to create the necessary tables.
+    - Import the `login.sql` file to create the necessary tables.
 
 3. **Configure the Database Connection in login_signup.php**:
     <?php
