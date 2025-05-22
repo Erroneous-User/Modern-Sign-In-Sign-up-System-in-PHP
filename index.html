@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up and Sign In Form (JS Dummy)</title>
+  <link rel="stylesheet" href="index.css">
+  <style>
+    /* Minimal styling for alerts */
+    .alert { color: #fff; background: #e74c3c; padding: 8px; margin-bottom: 10px; border-radius: 4px; }
+    .alert-success { background: #27ae60; }
+  </style>
+</head>
+<body>
+  <div class="container" id="container" role="main">
+    <section aria-labelledby="signup-title" class="form-container sign-up-container">
+      <form id="signupForm" aria-label="Create Account Form" autocomplete="off">
+        <h1 id="signup-title">Create Account</h1>
+        <div id="signupError" class="alert" style="display:none;"></div>
+        <div id="signupSuccess" class="alert alert-success" style="display:none;"></div>
+        <input type="text" placeholder="Name" name="signup_name" aria-required="true" required />
+        <input type="email" placeholder="Email" name="signup_user_name" aria-required="true" required />
+        <input type="password" placeholder="Password" name="signup_pass" aria-required="true" required />
+        <button type="submit">Sign Up</button>
+      </form>
+    </section>
+    <section aria-labelledby="signin-title" class="form-container sign-in-container">
+      <form id="signinForm" aria-label="Sign In Form" autocomplete="off">
+        <h1 id="signin-title">Sign in</h1>
+        <div id="signinError" class="alert" style="display:none;"></div>
+        <div id="signinSuccess" class="alert alert-success" style="display:none;"></div>
+        <input type="email" placeholder="Email" name="login_user_name" aria-required="true" required />
+        <input type="password" placeholder="Password" name="login_pass" aria-required="true" required />
+        <a href="#" aria-label="Forgot your password?">Forgot your password?</a>
+        <button type="submit">Sign In</button>
+      </form>
+    </section>
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button class="ghost" id="signIn" type="button">Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start journey with us</p>
+          <button class="ghost" id="signUp" type="button">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      Created with <i class="fa fa-heart" aria-hidden="true"></i> by
+      <a target="_blank" href="#">Arun</a>
+      - Read how I created this and how you can join the challenge
+      <a target="_blank" href="#">here</a>.
+    </p>
+  </footer>
+  <script>
+    // Dummy in-memory "database"
+    const users = [];
+
+    // Helper functions
+    function showMessage(id, message, isSuccess = false) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.style.display = 'block';
+      el.className = isSuccess ? 'alert alert-success' : 'alert';
+    }
+    function hideMessage(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // SIGNUP
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      hideMessage('signupError');
+      hideMessage('signupSuccess');
+
+      const name = this.signup_name.value.trim();
+      const email = this.signup_user_name.value.trim().toLowerCase();
+      const password = this.signup_pass.value;
+
+      // Check if user exists
+      const exists = users.some(u => u.email === email);
+      if (exists) {
+        showMessage('signupError', 'Username already exists.');
+        return;
+      }
+      // Add to dummy DB
+      users.push({ name, email, password });
+      showMessage('signupSuccess', 'Signup Success. You may login now.', true);
+      this.reset();
+    });
+
+    // SIGNIN
+    document.getElementById('signinForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      hideMessage('signinError');
+      hideMessage('signinSuccess');
+
+      const email = this.login_user_name.value.trim().toLowerCase();
+      const password = this.login_pass.value;
+
+      const user = users.find(u => u.email === email);
+      if (!user || user.password !== password) {
+        showMessage('signinError', 'Incorrect Email or Password!');
+        return;
+      }
+      showMessage('signinSuccess', `Welcome, ${user.name}!`, true);
+      // Simulate redirect after login
+      setTimeout(() => { alert('Logged in! (dummy)'); }, 1000);
+      this.reset();
+    });
+
+    // Overlay panel toggling (if you have CSS for this)
+    document.getElementById('signUp').onclick = function() {
+      document.getElementById('container').classList.add('right-panel-active');
+    };
+    document.getElementById('signIn').onclick = function() {
+      document.getElementById('container').classList.remove('right-panel-active');
+    };
+  </script>
+</body>
+</html>
